@@ -1,10 +1,10 @@
 # ADR-0001: Record Architecture Decisions
 
-Date: 2026-05-05
+Date: YYYY-MM-DD
 
 ## Status
 
-Accepted
+Pending/Accepted
 
 ## Context
 

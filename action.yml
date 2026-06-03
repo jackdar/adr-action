@@ -6,6 +6,10 @@ inputs:
     description: GitHub token for reading and committing ADR files
     required: true
     default: ${{ github.token }}
+  adr-directory:
+    description: Path to the ADR directory relative to the repo root
+    required: false
+    default: doc/adr
 
 runs:
   using: node20

@@ -1,11 +1,11 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-const ADR_PATH_PREFIX = 'doc/adr/'
 const STATUS_REGEX = /^(## Status\s*\n\n)Pending$/m
 
 async function run(): Promise<void> {
   const token = core.getInput('github-token', { required: true })
+  const adrDirectory = core.getInput('adr-directory').replace(/\/?$/, '/')
   const octokit = github.getOctokit(token)
   const { owner, repo } = github.context.repo
 
@@ -16,7 +16,7 @@ async function run(): Promise<void> {
   })
 
   const addedAdrFiles = (commitData.files ?? [])
-    .filter((f) => f.status === 'added' && f.filename.startsWith(ADR_PATH_PREFIX) && f.filename.endsWith('.md'))
+    .filter((f) => f.status === 'added' && f.filename.startsWith(adrDirectory) && f.filename.endsWith('.md'))
     .map((f) => f.filename)
 
   if (addedAdrFiles.length === 0) {

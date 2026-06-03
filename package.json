@@ -1,14 +1,18 @@
 {
   "name": "adr-action",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "GitHub action to automatically approve merged Architecture Decision Records (ADRs)",
+  "main": "dist/index.js",
   "scripts": {
     "build": "ncc build src/index.ts -o dist --minify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "actions",
+    "adr",
+    "architecture decision records"
+  ],
+  "author": "Jack Darlington",
   "license": "ISC",
   "type": "es",
   "devDependencies": {
