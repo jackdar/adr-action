@@ -46,7 +46,9 @@ ADRs must be Markdown files with a `## Status` section. The action looks for the
 Pending
 ```
 
-Files without a `Pending` status are skipped silently. See [`adr-example.md`](adr-example.md) for a full template.
+Only files with a status of exactly `Pending` are updated — everything else is skipped silently. If you want to merge an ADR to main without it being auto-accepted (e.g. it is still under discussion), use `Draft` or `Proposed` as the status instead.
+
+See [`adr-example.md`](adr-example.md) for a full template.
 
 ## How it works
 

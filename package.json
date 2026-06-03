@@ -1,7 +1,7 @@
 {
   "name": "adr-action",
-  "version": "1.2.4",
-  "description": "GitHub action to automatically approve merged Architecture Decision Records (ADRs)",
+  "version": "1.2.5",
+  "description": "GitHub action to automatically accept merged Architecture Decision Records (ADRs)",
   "main": "dist/index.js",
   "scripts": {
     "build": "npx ncc build src/index.ts -o dist --minify",
