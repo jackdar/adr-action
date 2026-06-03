@@ -9,16 +9,15 @@ async function run(): Promise<void> {
   const octokit = github.getOctokit(token)
   const { owner, repo } = github.context.repo
 
-  const commits: Array<{ added?: string[] }> =
-    (github.context.payload.commits as Array<{ added?: string[] }>) ?? []
+  const { data: commitData } = await octokit.rest.repos.getCommit({
+    owner,
+    repo,
+    ref: github.context.sha,
+  })
 
-  const addedAdrFiles = [
-    ...new Set(
-      commits
-        .flatMap((c) => c.added ?? [])
-        .filter((f) => f.startsWith(ADR_PATH_PREFIX) && f.endsWith('.md'))
-    ),
-  ]
+  const addedAdrFiles = (commitData.files ?? [])
+    .filter((f) => f.status === 'added' && f.filename.startsWith(ADR_PATH_PREFIX) && f.filename.endsWith('.md'))
+    .map((f) => f.filename)
 
   if (addedAdrFiles.length === 0) {
     core.info('No new ADR files detected, nothing to do.')
