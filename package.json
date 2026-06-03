@@ -4,8 +4,9 @@
   "description": "GitHub action to automatically approve merged Architecture Decision Records (ADRs)",
   "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build src/index.ts -o dist --minify",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx ncc build src/index.ts -o dist --minify",
+    "lint": "npx tsc --noEmit && npx eslint .",
+    "test": "vitest --coverage --watch=false"
   },
   "keywords": [
     "actions",
@@ -14,11 +15,17 @@
   ],
   "author": "Jack Darlington",
   "license": "ISC",
-  "type": "es",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^20.19.41",
     "@vercel/ncc": "^0.38.4",
-    "typescript": "^6.0.3"
+    "@vitest/coverage-v8": "^4.1.8",
+    "eslint": "^10.4.1",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.1",
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",

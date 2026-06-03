@@ -1,0 +1,23 @@
+name: Unit Tests
+description: Installs dependencies and runs unit tests
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: .nvmrc
+        cache: npm
+        cache-dependency-path: |
+          package-lock.json
+          .nvmrc
+
+    - name: Install Dependencies
+      shell: bash
+      run: |
+        npm ci
+
+    - name: Run Unit Tests
+      shell: bash
+      run: npm test
