@@ -1,3 +1,56 @@
 # ADR Action
 
-GitHub action to automatically approve merged Architecture Decision Records (ADRs)
+GitHub action to automatically accept merged Architecture Decision Records (ADRs).
+
+When a new ADR file is merged to your main branch, this action finds any ADRs with a status of `Pending` and updates them to `Accepted` — committed back to the branch automatically.
+
+## Usage
+
+Add a workflow file to your repository:
+
+```yaml
+# .github/workflows/adr-accept.yml
+name: Accept ADRs
+
+on:
+  push:
+    branches: [main]
+    paths: ["doc/adr/**"]
+
+jobs:
+  accept_adrs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jackdar/adr-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+## Inputs
+
+| Input | Description | Required | Default |
+|-------|-------------|----------|---------|
+| `github-token` | GitHub token for reading and committing ADR files | Yes | `${{ github.token }}` |
+| `adr-directory` | Path to the ADR directory relative to the repo root | No | `doc/adr` |
+
+## ADR format
+
+ADRs must be Markdown files with a `## Status` section. The action looks for the exact text `Pending` on the line immediately following the heading and replaces it with `Accepted`.
+
+```markdown
+## Status
+
+Pending
+```
+
+Files without a `Pending` status are skipped silently. See [`adr-example.md`](adr-example.md) for a full template.
+
+## How it works
+
+1. On each push to `main` that touches your ADR directory, the action inspects the triggering commit for newly added `.md` files.
+2. Any new file with `## Status\n\nPending` has its status updated to `Accepted`.
+3. The changes are committed back to the branch in a single commit.
+
