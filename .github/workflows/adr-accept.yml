@@ -1,3 +1,5 @@
+name: Accept ADRs
+
 on:
   push:
     branches: [main]
