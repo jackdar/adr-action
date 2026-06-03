@@ -1,0 +1,12 @@
+name: ADR Auto-Accept
+description: Automatically sets the status of newly merged ADR files from Pending to Accepted
+
+inputs:
+  github-token:
+    description: GitHub token for reading and committing ADR files
+    required: true
+    default: ${{ github.token }}
+
+runs:
+  using: node20
+  main: dist/index.js

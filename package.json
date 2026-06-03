@@ -1,0 +1,23 @@
+{
+  "name": "adr-action",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "es",
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "@vercel/ncc": "^0.38.4",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1"
+  }
+}

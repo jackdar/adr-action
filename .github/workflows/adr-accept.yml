@@ -1,0 +1,16 @@
+on:
+  push:
+    branches: [main]
+    paths: ["doc/adr/**"]
+
+jobs:
+  accept_adrs:
+    name: Accept ADRs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
