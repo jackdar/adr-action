@@ -36,6 +36,12 @@ jobs:
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Exit if tag exists
+        if: steps.tag.outputs.exists == 'true'
+        run: |
+          echo "Tag ${{ steps.version.outputs.version }} already exists — skipping release."
+          exit 0
+
       - name: Build
         if: steps.tag.outputs.exists == 'false'
         run: npm ci && npm run build
