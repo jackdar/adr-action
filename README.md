@@ -25,8 +25,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jackdar/adr-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
@@ -56,3 +54,11 @@ See [`adr-example.md`](adr-example.md) for a full template.
 2. Any new file with `## Status\n\nPending` has its status updated to `Accepted`.
 3. The changes are committed back to the branch in a single commit.
 
+## Releasing
+
+Merge PRs to main freely — no version bump required. When ready for a new release:
+
+1. Bump the version in `package.json` using `npm version patch/minor/major`
+2. Open a PR and merge to main
+
+The release workflow will build, create a GitHub release with auto-generated notes, and update the floating major tag  automatically.
