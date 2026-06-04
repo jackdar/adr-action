@@ -1,5 +1,5 @@
 name: Tag and Release
-description: Tags the branch and creates a new release
+description: Tags the branch and creates a new release on new version
 
 inputs:
   github-token:
@@ -10,19 +10,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup Node
-      uses: actions/setup-node@v6
-      with:
-        node-version-file: .nvmrc
-        cache: npm
-        cache-dependency-path: |
-          package-lock.json
-          .nvmrc
-
-    - name: Install Dependencies and Build
-      shell: bash
-      run: npm ci && npm run build
-
     - name: Read version
       id: version
       shell: bash
@@ -32,7 +19,34 @@ runs:
         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
         echo "major=$MAJOR" >> "$GITHUB_OUTPUT"
 
+    - name: Check tag exists
+      id: tag
+      shell: bash
+      run: |
+        if git ls-remote --tags origin "${{ steps.version.outputs.version }}" | grep -q .; then
+          echo "exists=true" >> "$GITHUB_OUTPUT"
+          echo "Tag ${{ steps.version.outputs.version }} already exists — skipping release."
+        else
+          echo "exists=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Setup Node
+      if: steps.tag.outputs.exists == 'false'
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: .nvmrc
+        cache: npm
+        cache-dependency-path: |
+          package-lock.json
+          .nvmrc
+
+    - name: Install Dependencies and Build
+      if: steps.tag.outputs.exists == 'false'
+      shell: bash
+      run: npm ci && npm run build
+
     - name: Tag and release
+      if: steps.tag.outputs.exists == 'false'
       shell: bash
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,6 +62,9 @@ runs:
           git commit -m "chore: build $VERSION [skip ci]"
           git push origin HEAD:main
         fi
+
+        git tag "$VERSION"
+        git push origin "$VERSION"
 
         gh release create "$VERSION" \
           --title "$VERSION" \

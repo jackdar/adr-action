@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: ['v*']
+    branches: [main]
 
 jobs:
   release:
@@ -18,4 +18,3 @@ jobs:
 
       - name: Tag and Release
         uses: ./.github/actions/release
-
