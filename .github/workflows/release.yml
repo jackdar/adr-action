@@ -18,3 +18,5 @@ jobs:
 
       - name: Tag and Release
         uses: ./.github/actions/release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
