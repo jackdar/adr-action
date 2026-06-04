@@ -49,7 +49,7 @@ runs:
       if: steps.tag.outputs.exists == 'false'
       shell: bash
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ inputs.github-token }}
       run: |
         VERSION="${{ steps.version.outputs.version }}"
         MAJOR="${{ steps.version.outputs.major }}"
