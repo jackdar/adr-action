@@ -10,28 +10,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Read version
-      id: version
-      shell: bash
-      run: |
-        VERSION="v$(node -p "require('./package.json').version")"
-        MAJOR="v$(node -p "require('./package.json').version.split('.')[0]")"
-        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-        echo "major=$MAJOR" >> "$GITHUB_OUTPUT"
-
-    - name: Check tag exists
-      id: tag
-      shell: bash
-      run: |
-        if git ls-remote --tags origin "${{ steps.version.outputs.version }}" | grep -q .; then
-          echo "exists=true" >> "$GITHUB_OUTPUT"
-          echo "Tag ${{ steps.version.outputs.version }} already exists — skipping release."
-        else
-          echo "exists=false" >> "$GITHUB_OUTPUT"
-        fi
-
     - name: Setup Node
-      if: steps.tag.outputs.exists == 'false'
       uses: actions/setup-node@v6
       with:
         node-version-file: .nvmrc
@@ -41,18 +20,16 @@ runs:
           .nvmrc
 
     - name: Install Dependencies and Build
-      if: steps.tag.outputs.exists == 'false'
       shell: bash
       run: npm ci && npm run build
 
     - name: Tag and release
-      if: steps.tag.outputs.exists == 'false'
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        VERSION="${{ steps.version.outputs.version }}"
-        MAJOR="${{ steps.version.outputs.major }}"
+        VERSION="v$(node -p "require('./package.json').version")"
+        MAJOR="v$(node -p "require('./package.json').version.split('.')[0]")"
 
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"

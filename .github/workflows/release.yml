@@ -5,8 +5,33 @@ on:
     branches: [main]
 
 jobs:
+  check:
+    name: Check Version
+    runs-on: ubuntu-latest
+    outputs:
+      tag_exists: ${{ steps.tag.outputs.exists }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check Tag Exists
+        id: tag
+        shell: bash
+        run: |
+          VERSION="v$(node -p "require('./package.json').version")"
+          if git ls-remote --tags origin "$VERSION" | grep -q .; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Tag $VERSION already exists — skipping release."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
   release:
     name: Release
+    needs: check
+    if: needs.check.outputs.tag_exists == 'false'
     runs-on: ubuntu-latest
     permissions:
       contents: write
