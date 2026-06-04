@@ -15,8 +15,7 @@ runs:
 
     - name: Install Dependencies
       shell: bash
-      run: |
-        npm ci
+      run: npm ci
 
     - name: Run Unit Tests
       shell: bash
