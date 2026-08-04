@@ -1,6 +1,6 @@
 {
   "name": "adr-action",
-  "version": "1.2.6",
+  "version": "1.3.0",
   "description": "GitHub action to automatically accept merged Architecture Decision Records (ADRs)",
   "main": "dist/index.js",
   "scripts": {

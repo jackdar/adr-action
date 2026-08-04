@@ -1,7 +1,9 @@
+import { AdrFile, AdrFileContent } from './types'
+
 const STATUS_REGEX = /^(## Status\s*\n\n)Pending$/m
 
 export function filterAddedAdrFiles(
-  files: Array<{ status: string; filename: string }>,
+  files: Array<AdrFile>,
   adrDirectory: string
 ): string[] {
   return files
@@ -17,7 +19,7 @@ export function filterAddedAdrFiles(
 export function applyStatusUpdate(
   path: string,
   content: string
-): { path: string; content: string } | null {
+): AdrFileContent | null {
   const updated = content.replace(STATUS_REGEX, '$1Accepted')
   if (updated === content) return null
   return { path, content: updated }
