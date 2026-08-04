@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import type { getOctokit } from '@actions/github'
+import { AdrFileContent } from './types'
 
 type Octokit = ReturnType<typeof getOctokit>
 
@@ -8,10 +9,14 @@ export async function fetchFileContents(
   owner: string,
   repo: string,
   paths: string[]
-): Promise<Array<{ path: string; content: string; treeSha: string } | null>> {
+): Promise<Array<(AdrFileContent & { treeSha: string }) | null>> {
   return Promise.all(
     paths.map(async (path) => {
-      const { data } = await octokit.rest.repos.getContent({ owner, repo, path })
+      const { data } = await octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path,
+      })
 
       if (!('content' in data) || data.type !== 'file') {
         core.warning(`Skipping ${path}: unexpected response type`)
@@ -31,7 +36,7 @@ export async function commitUpdates(
   octokit: Octokit,
   owner: string,
   repo: string,
-  updates: Array<{ path: string; content: string }>,
+  updates: Array<AdrFileContent>,
   baseTreeSha: string,
   parentSha: string,
   ref: string
